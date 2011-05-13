@@ -4,37 +4,33 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by the ISA team
+ * Provides a number of methods to manipulate the Spreadsheet representation (a List<String[]> where each List item
+ * is a row with a number of columns) returned by the CSVReader class (http://opencsv.sourceforge.net/).
  *
  * @author Eamonn Maguire (eamonnmag@gmail.com)
- *         <p/>
- *         Date: 13/05/2011
- *         Time: 11:44
  */
 public class SpreadsheetManipulation {
 
-    private List<String[]> fileContents;
 
-    public SpreadsheetManipulation(List<String[]> fileContents) {
-        this.fileContents = fileContents;
-    }
 
     /**
      * Return the column Headers
      *
+     * @param fileContents - @see List<String[]> pertaining to the Rows and columns of the spreadsheet
      * @return the Column Headers, assuming that row 0 is where the column headers are positioned.
      */
-    public String[] getColumnHeaders() {
+    public String[] getColumnHeaders(List<String[]> fileContents) {
         return fileContents.get(0);
     }
 
     /**
      * Given a number of row indices, e.g. 0, 3, 4, 6, 7 this method will return a subset of the sheet.
      *
+     * @param fileContents -  @see List<String[]> pertaining to the Rows and columns of the spreadsheet
      * @param rowIndices - a number of row indexes.
-     * @return - @see List<String[]> pertaining to the
+     * @return - @see List<String[]> pertaining to the Rows and columns of the spreadsheet
      */
-    public List<String[]> getRowSubset(int... rowIndices) {
+    public List<String[]> getRowSubset(List<String[]> fileContents, int... rowIndices) {
 
         List<String[]> subSheet = new ArrayList<String[]>();
 
@@ -50,7 +46,14 @@ public class SpreadsheetManipulation {
         return subSheet;
     }
 
-    public List<String[]> getColumnSubset(boolean includeColumnHeaders, int... columnIndices) {
+    /**
+     * Given a number of column indices, e.g. 0, 1, 4, 5, 8 this method will return a subset of the columns in the sheet and all rows.
+     * @param fileContents - @see List<String[]> pertaining to the Rows and columns of the spreadsheet
+     * @param includeColumnHeaders - whether or not to return the column headers in the resulting sheet representation
+     * @param columnIndices - a number of column indices.
+     * @return - @see List<String[]> pertaining to the Rows and columns of the spreadsheet
+     */
+    public List<String[]> getColumnSubset(List<String[]> fileContents,boolean includeColumnHeaders, int... columnIndices) {
 
         List<String[]> subSheet = new ArrayList<String[]>();
 

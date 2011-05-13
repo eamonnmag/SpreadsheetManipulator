@@ -20,11 +20,8 @@ public class SpreadsheetManipulationTest {
     public List<String[]> load() {
         Loader loader = new Loader();
         try {
-            List<String[]> sheet = loader.loadSheet("test/a_proteome.txt");
 
-            System.out.println("Loaded " + sheet.size() + " rows");
-
-            return sheet;
+            return loader.loadSheet("testdata/a_proteome.txt");
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -37,9 +34,9 @@ public class SpreadsheetManipulationTest {
 
         System.out.println("Testing get column names");
 
-        SpreadsheetManipulation manipulation = new SpreadsheetManipulation(load());
+        SpreadsheetManipulation manipulation = new SpreadsheetManipulation();
 
-        String[] columnNames = manipulation.getColumnHeaders();
+        String[] columnNames = manipulation.getColumnHeaders(load());
 
         for (String columnName : columnNames) {
             System.out.print(columnName + "\t");
@@ -51,11 +48,11 @@ public class SpreadsheetManipulationTest {
 
         System.out.println("Testing get column subset");
 
-        SpreadsheetManipulation manipulation = new SpreadsheetManipulation(load());
+        SpreadsheetManipulation manipulation = new SpreadsheetManipulation();
 
         System.out.println();
 
-        List<String[]> subset = manipulation.getColumnSubset(true, 0, 3, 4, 5);
+        List<String[]> subset = manipulation.getColumnSubset(load(), true, 0, 3, 4, 5);
 
         for (String[] columns : subset) {
             for (String columnValue : columns) {
@@ -69,11 +66,11 @@ public class SpreadsheetManipulationTest {
     public void testRowManipulation() {
         System.out.println("Testing get row subset");
 
-        SpreadsheetManipulation manipulation = new SpreadsheetManipulation(load());
+        SpreadsheetManipulation manipulation = new SpreadsheetManipulation();
 
         System.out.println();
 
-        List<String[]> subset = manipulation.getRowSubset(0, 3, 4, 5);
+        List<String[]> subset = manipulation.getRowSubset(load(), 0, 3, 4, 5);
 
         for (String[] columns : subset) {
             for (String columnValue : columns) {
