@@ -1,5 +1,6 @@
 package org.isatools.manipulator;
 
+import org.isatools.io.FileType;
 import org.isatools.io.Loader;
 import org.junit.Test;
 
@@ -21,7 +22,7 @@ public class SpreadsheetManipulationTest {
         Loader loader = new Loader();
         try {
 
-            return loader.loadSheet("testdata/a_proteome.txt");
+            return loader.loadSheet("testdata/a_proteome.txt", FileType.TAB);
 
         } catch (IOException e) {
             e.printStackTrace();

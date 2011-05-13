@@ -17,12 +17,12 @@ import java.util.List;
  */
 public class Loader {
 
-    public List<String[]> loadSheet(String file) throws IOException {
+    public List<String[]> loadSheet(String file, FileType fileType) throws IOException {
         File spreadsheetFile = new File(file);
 
         if(spreadsheetFile.exists()) {
 
-            CSVReader reader = new CSVReader(new FileReader(spreadsheetFile), '\t');
+            CSVReader reader = new CSVReader(new FileReader(spreadsheetFile), fileType.getDelimiter());
 
             return reader.readAll();
 
