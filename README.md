@@ -37,14 +37,14 @@ SpreadsheetManipulation manipulation = new SpreadsheetManipulation();
 String[] columnNames = manipulation.getColumnHeaders(spreadsheet);
 ```
 
-#### Get a subset of columns and values from the spreadsheet
+### Get a subset of columns and values from the spreadsheet
 ```java
 SpreadsheetManipulation manipulation = new SpreadsheetManipulation();
 // You can specify as many columns as you like in this call
 List<String[]> subset = manipulation.getColumnSubset(spreadsheet, true, 0, 3, 4, 5);
 ```
 
-#### Get a subset of rows and values from the spreadsheet
+### Get a subset of rows and values from the spreadsheet
 ```java
 SpreadsheetManipulation manipulation = new SpreadsheetManipulation();
 List<String[]> subset = manipulation.getRowSubset(spreadsheet, 0, 1, 2, 6);
