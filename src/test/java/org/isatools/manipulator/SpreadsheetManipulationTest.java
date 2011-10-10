@@ -1,11 +1,15 @@
 package org.isatools.manipulator;
 
+import com.google.common.collect.ListMultimap;
+import com.google.common.collect.Multimap;
 import org.isatools.io.FileType;
 import org.isatools.io.Loader;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by the ISA team
@@ -35,9 +39,7 @@ public class SpreadsheetManipulationTest {
 
         System.out.println("Testing get column names");
 
-        SpreadsheetManipulation manipulation = new SpreadsheetManipulation();
-
-        String[] columnNames = manipulation.getColumnHeaders(load());
+        String[] columnNames = SpreadsheetManipulation.getColumnHeaders(load());
 
         for (String columnName : columnNames) {
             System.out.print(columnName + "\t");
@@ -48,12 +50,9 @@ public class SpreadsheetManipulationTest {
     public void testGetColumnSubset() {
 
         System.out.println("Testing get column subset");
-
-        SpreadsheetManipulation manipulation = new SpreadsheetManipulation();
-
         System.out.println();
 
-        List<String[]> subset = manipulation.getColumnSubset(load(), true, 0, 3, 4, 5);
+        List<String[]> subset = SpreadsheetManipulation.getColumnSubset(load(), true, 0, 3, 4, 5);
 
         for (String[] columns : subset) {
             for (String columnValue : columns) {
@@ -67,11 +66,9 @@ public class SpreadsheetManipulationTest {
     public void testRowManipulation() {
         System.out.println("Testing get row subset");
 
-        SpreadsheetManipulation manipulation = new SpreadsheetManipulation();
-
         System.out.println();
 
-        List<String[]> subset = manipulation.getRowSubset(load(), 0, 3, 4, 5);
+        List<String[]> subset = SpreadsheetManipulation.getRowSubset(load(), 0, 3, 4, 5);
 
         for (String[] columns : subset) {
             for (String columnValue : columns) {
@@ -81,4 +78,22 @@ public class SpreadsheetManipulationTest {
         }
     }
 
+    @Test
+    public void testGroups() {
+        System.out.println("Testing get groups");
+
+        System.out.println();
+
+        Map<String, Set<String>> subset = SpreadsheetManipulation.getDataGroupsByColumn(load(), "Factor", false);
+
+        System.out.println("Found " + subset.size() + " groups...");
+
+        for (String group : subset.keySet()) {
+            System.out.println("For group: " + group + " we have:");
+            for(String sample : subset.get(group)) {
+                System.out.println("\t" + sample);
+            }
+            System.out.println();
+        }
+    }
 }
