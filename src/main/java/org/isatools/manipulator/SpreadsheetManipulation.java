@@ -169,12 +169,14 @@ public class SpreadsheetManipulation {
             if(ignoreCase ? columnName.equalsIgnoreCase(lookingFor) : columnName.equals(lookingFor)) {
                 columnIndexes.add(index);
             }
+            index++;
         }
 
         return columnIndexes;
     }
     
     public static String[] findRowWithValue(List<String[]> fileContents, String columnName, String value) {
+        // getting the indexes in advance means we only check the columns that we actually want, not all.
         Set<Integer> columnIndexesToLookAt = getIndexesWithThisColumnName(fileContents, columnName, true);
         for(String[] row : fileContents) {
              for(Integer columnIndex : columnIndexesToLookAt) {
