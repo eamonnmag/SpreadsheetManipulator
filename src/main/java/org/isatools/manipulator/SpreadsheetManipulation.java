@@ -62,7 +62,6 @@ public class SpreadsheetManipulation {
 
         for (int rowNumber = includeColumnHeaders ? 0 : 1; rowNumber < fileContents.size(); rowNumber++) {
 
-
             String[] subsetOfColumns = new String[columnIndices.length];
 
             int count = 0;
@@ -70,7 +69,6 @@ public class SpreadsheetManipulation {
 
                 if (columnIndex < fileContents.get(rowNumber).length) {
                     subsetOfColumns[count] = fileContents.get(rowNumber)[columnIndex];
-
                     count++;
                 } else {
                     throw new IndexOutOfBoundsException("You requested column " + columnIndex + "  from the spreadsheet. " +
@@ -86,7 +84,7 @@ public class SpreadsheetManipulation {
     }
 
     public static List<String[]> removeColumns(List<String[]> fileContents, int... columnIndicesToRemove) {
-        return null;
+        return fileContents;
     }
 
     /**
