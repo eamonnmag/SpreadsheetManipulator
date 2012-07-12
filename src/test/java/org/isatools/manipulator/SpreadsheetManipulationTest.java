@@ -7,10 +7,12 @@ import org.isatools.io.Loader;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -99,7 +101,7 @@ public class SpreadsheetManipulationTest {
             System.out.println();
         }
     }
-
+    
     @Test
     public void testConversionToListFromArray() {
         Object[][] testArray = new Object[3][5];
@@ -111,5 +113,22 @@ public class SpreadsheetManipulationTest {
         List<String[]> result = arrayToListConversion.convert(testArray);
 
         assertTrue("Result not the expected size", result.size() == 3);
+    }
+
+    @Test
+    public void testGetIndexesWithColumnName()  {
+        Collection<Integer> indexes = SpreadsheetManipulation.getIndexesWithThisColumnName(load(), "Sample Name", true);
+
+        assertTrue("Should have got 1 instance of Sample name in sheet, but I didn't.", indexes.size() == 1);
+        assertTrue("Index 0 should be in here. But it isn't.", indexes.contains(0));
+        assertFalse("Index 1 should not be in here. But it is.", indexes.contains(1));
+    }
+    
+    @Test
+    public void testGetRowInSheetWithValueForColumn() {
+        String[] row = SpreadsheetManipulation.findRowWithValue(load(), "Sample Name", "N-0.1-aliquot11");
+
+        assertTrue("Row should not be null.", row != null);
+        assertTrue("Index 2 of this row should contain \"N-0.1\".", row[2].equals("N-0.1"));
     }
 }

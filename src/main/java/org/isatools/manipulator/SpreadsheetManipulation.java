@@ -1,9 +1,5 @@
 package org.isatools.manipulator;
 
-import com.google.common.collect.LinkedListMultimap;
-import com.google.common.collect.ListMultimap;
-
-import javax.swing.table.TableColumn;
 import java.util.*;
 
 /**
@@ -163,5 +159,30 @@ public class SpreadsheetManipulation {
             }
         }
         return "";
+    }
+    
+    public static Set<Integer> getIndexesWithThisColumnName(List<String[]> fileContents, String lookingFor, boolean ignoreCase) {
+        Set<Integer> columnIndexes = new HashSet<Integer>();
+
+        int index = 0;
+        for(String columnName : getColumnHeaders(fileContents)) {
+            if(ignoreCase ? columnName.equalsIgnoreCase(lookingFor) : columnName.equals(lookingFor)) {
+                columnIndexes.add(index);
+            }
+        }
+
+        return columnIndexes;
+    }
+    
+    public static String[] findRowWithValue(List<String[]> fileContents, String columnName, String value) {
+        Set<Integer> columnIndexesToLookAt = getIndexesWithThisColumnName(fileContents, columnName, true);
+        for(String[] row : fileContents) {
+             for(Integer columnIndex : columnIndexesToLookAt) {
+                 if(row[columnIndex].equals(value)) {
+                     return row;
+                 }
+             }
+        }
+        return null;
     }
 }
