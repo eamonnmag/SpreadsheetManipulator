@@ -128,6 +128,20 @@ public class SpreadsheetManipulation {
         }
         return modifiedSpreadsheet;
     }
+    
+    public static List<String[]> moveColumn(List<String[]> spreadsheet, int indexOfColumnToMove, int indexToMoveTo) {
+        List<String[]> modifiedSpreadsheet = new ArrayList<String[]>();
+        for (String[] row : spreadsheet) {
+            List<String> rowAsList = new ArrayList<String>();
+            rowAsList.addAll(Arrays.asList(row));
+
+            String value = rowAsList.remove(indexOfColumnToMove);
+            rowAsList.add(indexToMoveTo, value);
+            
+            modifiedSpreadsheet.add(rowAsList.toArray(new String[rowAsList.size()]));
+        }
+        return modifiedSpreadsheet;
+    }
 
     /**
      * Groups up types of columns such as factors and returns the concatenation of those values on a per row basis.

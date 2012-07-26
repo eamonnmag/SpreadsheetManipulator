@@ -132,6 +132,20 @@ public class SpreadsheetManipulationTest {
     }
 
     @Test
+    public void testMoveColumn() {
+        System.out.println("Testing move column.");
+
+        List<String[]> sheet = SpreadsheetManipulation.moveColumn(testSpreadsheet, 0, 5);
+
+        assertTrue("Should have the same length in both sheets.", sheet.get(0).length == testSpreadsheet.get(0).length);
+        assertTrue("Should have Protocol REF in position 0 now.", sheet.get(0)[0].equals("Protocol REF"));
+        assertTrue("Should have protein extraction as a value in position 1 of column 0 now.", sheet.get(1)[0].equals("protein extraction"));
+        assertTrue("Should have Sample Name in row 0 of column 5.", sheet.get(0)[5].equals("Sample Name"));
+        assertTrue("Should have S-0.1-aliquot11 in row 1 of column 5.", sheet.get(1)[5].equals("S-0.1-aliquot11"));
+
+    }
+
+    @Test
     public void testConversionToListFromArray() {
         Object[][] testArray = new Object[3][5];
         testArray[0] = new Object[]{"Sample Name", "Protocol REF", "Extract Name", "Protocol REF", "Label"};
