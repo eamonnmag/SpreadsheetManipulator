@@ -4,13 +4,11 @@ import org.isatools.conversion.ArrayToListConversion;
 import org.isatools.conversion.Converter;
 import org.isatools.io.FileType;
 import org.isatools.io.Loader;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -25,25 +23,28 @@ import static org.junit.Assert.assertTrue;
  */
 public class SpreadsheetManipulationTest {
 
+    private List<String[]> testSpreadsheet;
 
-    public List<String[]> load() {
+    @Before
+    public void setUp() throws Exception {
         Loader loader = new Loader();
         try {
 
-            return loader.loadSheet("testdata/a_proteome.txt", FileType.TAB);
+            testSpreadsheet = loader.loadSheet("testdata/a_proteome.txt", FileType.TAB);
 
         } catch (IOException e) {
             e.printStackTrace();
-            return null;
+            testSpreadsheet = null;
         }
     }
+
 
     @Test
     public void testGetColumnNames() {
 
         System.out.println("Testing get column names");
 
-        String[] columnNames = SpreadsheetManipulation.getColumnHeaders(load());
+        String[] columnNames = SpreadsheetManipulation.getColumnHeaders(testSpreadsheet);
 
         for (String columnName : columnNames) {
             System.out.print(columnName + "\t");
@@ -56,7 +57,7 @@ public class SpreadsheetManipulationTest {
         System.out.println("Testing get column subset");
         System.out.println();
 
-        List<String[]> subset = SpreadsheetManipulation.getColumnSubset(load(), true, 0, 3, 4, 5);
+        List<String[]> subset = SpreadsheetManipulation.getColumnSubset(testSpreadsheet, true, 0, 3, 4, 5);
 
         for (String[] columns : subset) {
 
@@ -73,7 +74,7 @@ public class SpreadsheetManipulationTest {
 
         System.out.println();
 
-        List<String[]> subset = SpreadsheetManipulation.getRowSubset(load(), 0, 3, 4, 5);
+        List<String[]> subset = SpreadsheetManipulation.getRowSubset(testSpreadsheet, 0, 3, 4, 5);
 
         for (String[] columns : subset) {
             for (String columnValue : columns) {
@@ -89,7 +90,7 @@ public class SpreadsheetManipulationTest {
 
         System.out.println();
 
-        Map<String, Set<String>> subset = SpreadsheetManipulation.getDataGroupsByColumn(load(), "Factor", false);
+        Map<String, Set<String>> subset = SpreadsheetManipulation.getDataGroupsByColumn(testSpreadsheet, "Factor", false);
 
         System.out.println("Found " + subset.size() + " groups...");
 
@@ -101,7 +102,35 @@ public class SpreadsheetManipulationTest {
             System.out.println();
         }
     }
-    
+
+    @Test
+    public void testRemoveColumn() {
+        System.out.println("Testing remove column.");
+
+        Set<Integer> indexesToRemove = new HashSet<Integer>();
+        indexesToRemove.add(3);
+        indexesToRemove.add(5);
+
+        List<String[]> sheet = SpreadsheetManipulation.removeColumns(testSpreadsheet, indexesToRemove);
+
+        assertTrue("Should have 2 less columns in spreadsheet with column removal", sheet.get(0).length == testSpreadsheet.get(0).length - 2);
+        assertTrue("Should have Labeled Extract Name in position 3 now.", sheet.get(0)[3].equals("Labeled Extract Name"));
+        assertTrue("Should have Term Accession Number in position 6 now.", sheet.get(0)[6].equals("MS Assay Name"));
+    }
+
+    @Test
+    public void testAddColumn() {
+        System.out.println("Testing add column.");
+
+        List<String[]> sheet = SpreadsheetManipulation.insertColumn(testSpreadsheet, "Protocol REF", 5, "labeling");
+
+        assertTrue("Should have 1 more column in spreadsheet with column removal", sheet.get(0).length == testSpreadsheet.get(0).length + 1);
+        assertTrue("Should have Protocol REF in position 6 now.", sheet.get(0)[5].equals("Protocol REF"));
+        assertTrue("Should have labeling in position 6 now.", sheet.get(3)[5].equals("labeling"));
+        assertTrue("Should have Term Accession Number in position 6 now.", sheet.get(0)[25].equals("Term Accession Number"));
+
+    }
+
     @Test
     public void testConversionToListFromArray() {
         Object[][] testArray = new Object[3][5];
@@ -116,17 +145,17 @@ public class SpreadsheetManipulationTest {
     }
 
     @Test
-    public void testGetIndexesWithColumnName()  {
-        Collection<Integer> indexes = SpreadsheetManipulation.getIndexesWithThisColumnName(load(), "Sample Name", true);
+    public void testGetIndexesWithColumnName() {
+        Collection<Integer> indexes = SpreadsheetManipulation.getIndexesWithThisColumnName(testSpreadsheet, "Sample Name", true);
 
         assertTrue("Should have got 1 instance of Sample name in sheet, but I didn't.", indexes.size() == 1);
         assertTrue("Index 0 should be in here. But it isn't.", indexes.contains(0));
         assertFalse("Index 1 should not be in here. But it is.", indexes.contains(1));
     }
-    
+
     @Test
     public void testGetRowInSheetWithValueForColumn() {
-        String[] row = SpreadsheetManipulation.findRowWithValue(load(), "Sample Name", "N-0.1-aliquot11");
+        String[] row = SpreadsheetManipulation.findRowWithValue(testSpreadsheet, "Sample Name", "N-0.1-aliquot11");
 
         assertTrue("Row should not be null.", row != null);
         assertTrue("Index 2 of this row should contain \"N-0.1\".", row[2].equals("N-0.1"));
