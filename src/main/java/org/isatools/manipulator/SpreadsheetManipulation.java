@@ -116,19 +116,14 @@ public class SpreadsheetManipulation {
             List<String> rowAsList = new ArrayList<String>();
             rowAsList.addAll(Arrays.asList(row));
 
-            if (rowIndex == 0) {
-                rowAsList.add(insertionIndex, columnName);
-            } else {
-                String value = values.size() > rowIndex - 1 ? values.get(rowIndex - 1) : "";
-                rowAsList.add(insertionIndex, value);
-            }
+            rowAsList.add(insertionIndex, rowIndex == 0 ? columnName : values.get(rowIndex - 1));
 
             modifiedSpreadsheet.add(rowAsList.toArray(new String[rowAsList.size()]));
             rowIndex++;
         }
         return modifiedSpreadsheet;
     }
-    
+
     public static List<String[]> moveColumn(List<String[]> spreadsheet, int indexOfColumnToMove, int indexToMoveTo) {
         List<String[]> modifiedSpreadsheet = new ArrayList<String[]>();
         for (String[] row : spreadsheet) {
@@ -137,7 +132,7 @@ public class SpreadsheetManipulation {
 
             String value = rowAsList.remove(indexOfColumnToMove);
             rowAsList.add(indexToMoveTo, value);
-            
+
             modifiedSpreadsheet.add(rowAsList.toArray(new String[rowAsList.size()]));
         }
         return modifiedSpreadsheet;
@@ -246,5 +241,14 @@ public class SpreadsheetManipulation {
             }
         }
         return null;
+    }
+
+    public static void printSpreadsheet(List<String[]> spreadsheet) {
+        for (String[] row : spreadsheet) {
+            for (String column : row) {
+                System.out.print(column + "\t");
+            }
+            System.out.print("\n");
+        }
     }
 }

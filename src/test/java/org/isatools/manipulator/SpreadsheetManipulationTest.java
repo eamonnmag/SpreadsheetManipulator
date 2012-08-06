@@ -129,6 +129,8 @@ public class SpreadsheetManipulationTest {
         assertTrue("Should have labeling in position 6 now.", sheet.get(3)[5].equals("labeling"));
         assertTrue("Should have Term Accession Number in position 6 now.", sheet.get(0)[25].equals("Term Accession Number"));
 
+        SpreadsheetManipulation.printSpreadsheet(sheet);
+
     }
 
     @Test
